@@ -35,7 +35,7 @@ const handleLogin = async () => {
     console.log('User data:', response.data);
 
     // Redirect to a protected page (e.g., Dashboard)
-    router.push('/');
+    router.push('/app');
     
   } catch (error: any) {
     console.error('Auth failed', error);
