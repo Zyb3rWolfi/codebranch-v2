@@ -23,7 +23,7 @@ const handleLogin = async () => {
     // Because axios.defaults.withCredentials = true is set in main.js,
     // the browser will automatically include the CSRF token and 
     // save the session cookie Laravel sends back.
-    await axios.post('/login', {
+    await axios.post('/api/login', {
       email: email.value,
       password: password.value
     }, {
