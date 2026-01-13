@@ -12,6 +12,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/codeblocks', [\App\Http\Controllers\BranchController::class, 'index']);
     Route::get('/codeblocks/{id}', [\App\Http\Controllers\BranchController::class, 'show']);
+    Route::post('codeblock/add', [\App\Http\Controllers\BranchController::class, 'add']);
     
     // Add other protected routes here
 });

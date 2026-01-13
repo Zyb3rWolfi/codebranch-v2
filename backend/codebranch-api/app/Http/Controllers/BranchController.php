@@ -22,4 +22,26 @@ class BranchController
         $branch = \App\Models\Branch::where('user_id', auth()->id())->findOrFail($id);
         return response()->json($branch ->load('revisions'));
     }
+
+    public function add(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'intent' => 'nullable|string',
+            'description' => 'nullable|string',
+            'language' => 'required|string|max:100',
+            'code' => 'required|string',
+        ]);
+
+        $branch = \App\Models\Branch::create([
+            'user_id' => auth()->id(),
+            'title' => $validated['title'],
+            'intent' => $validated['intent'] ?? '',
+            'description' => $validated['description'] ?? '',
+            'language' => $validated['language'],
+            'code' => $validated['code'],
+        ]);
+
+        return response()->json($branch, 201);
+    }
 }
