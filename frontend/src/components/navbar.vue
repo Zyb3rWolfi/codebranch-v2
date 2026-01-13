@@ -53,7 +53,7 @@
 </nav>
 
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed top-0 left-0 z-40 w-96 h-full transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside id="sidebar" class="fixed top-0 left-0 z-40 w-80 h-full transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
    <div class="h-full px-3 py-4 overflow-y-auto border-[#3C3C3C]  border">
       <a href="https://flowbite.com/" class="flex items-center ps-2.5 mb-5">
          <span id="web-logo" class="self-center text-3xl   text-white font-semibold whitespace-nowrap">Codebranch</span>
@@ -63,24 +63,40 @@
           <!-- Item 1 Search -->
          <li class="bg-transparent">
             <li class="bg-transparent">
-            <form class="flex items-center w-full bg-transparent border-b pb-2">   
-                <label for="simple-search" class="sr-only bg-transparent">Search</label>
-                
-                <div class="relative flex-1 bg-transparent">
-                    <input type="text" id="simple-search" class="w-full px-3 placeholder:text-left py-2.5 border-transparent bg-transparent border rounded-base ps-2" placeholder="Search Codeblocks..." required />
-                </div>
+            <div class="px-3 py-4 border-b border-[#3C3C3C]">
+    <div class="relative mb-3">
+        <input 
+            type="text" 
+            class="w-full px-3 py-2 bg-transparent border border-[#3C3C3C] rounded-md text-sm text-white focus:border-blue-500 focus:ring-0" 
+            placeholder="Search Codeblocks..." 
+        />
+    </div>
+        <router-link :to="{ name: 'codeblocks', params: { id: 'new' } }" class="no-underline"> 
+        <button class="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-mono text-gray-400 bg-transparent border border-[#3C3C3C] rounded-md hover:border-white hover:text-white hover:bg-white/5 transition-all duration-300 group">
+    
+          <svg 
+              class="w-5 h-5 text-gray-400 group-hover:text-white group-hover:rotate-[90deg] group-hover:scale-110 transition-all duration-500 ease-in-out" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 8V16M8 12H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
 
-                <button type="submit" class="ms-4 inline-flex items-center justify-center shrink-0 border border-[#3C3C3C] text-white bg-[#2D2D30] focus:ring-4 px-4 rounded-md h-10 focus:outline-none whitespace-nowrap">
-                  <span class="text-sm">Create Codeblock</span>  
-                </button>
-            </form>
+        </button>
+        </router-link>
+
+    </div>
           </li>
 
          </li>
-
+        <div class="mt-5"></div>
          <!-- Item 2 Kanban -->
-         <li>
-            <BranchComponent />
+         <li v-for="item in codeblocks" :key="item.id" > 
+          <router-link :to="{ name: 'codeblocks', params: { id: item.id } }" class="no-underline">
+            <BranchComponent :branch="item" />
+          </router-link>
          </li>
 
       </ul>
@@ -89,12 +105,18 @@
 </template>
 
 <script setup> 
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { initFlowbite } from 'flowbite';
 import 'flowbite/dist/flowbite.css';
 import BranchComponent from './branchComponent.vue';
+import axios from 'axios';
+import router from '../router';
 
-onMounted(() => {
+const codeblocks = ref([]);
+
+onMounted(async() => {
   initFlowbite();
+  const response = await axios.get('/api/codeblocks'); 
+  codeblocks.value = response.data;
 });
 </script>

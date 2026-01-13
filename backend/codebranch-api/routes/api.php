@@ -9,6 +9,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user(); // Returns the authenticated user
     });
+
+    Route::get('/codeblocks', [\App\Http\Controllers\BranchController::class, 'index']);
+    Route::get('/codeblocks/{id}', [\App\Http\Controllers\BranchController::class, 'show']);
     
     // Add other protected routes here
 });

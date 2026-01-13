@@ -19,8 +19,13 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: 'codeblocks',
+        path: 'codeblocks/:id?',
         name: 'codeblocks',
+        component: CodeBlocksView,
+      },
+      {
+        path: 'codeblocks/new?',
+        name: 'newCodeblock',
         component: CodeBlocksView,
       },
     ],
