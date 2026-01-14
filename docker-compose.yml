@@ -15,7 +15,7 @@ services:
     image: nginx:alpine
     container_name: codebranch-api
     volumes:
-      - ./backend:/var/www
+      - ./backend/codebranch-api:/var/www 
       - ./nginx/conf.d:/etc/nginx/conf.d
     networks:
       - backend-network
