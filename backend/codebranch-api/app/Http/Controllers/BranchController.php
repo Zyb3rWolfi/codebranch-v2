@@ -44,4 +44,39 @@ class BranchController
 
         return response()->json($branch, 201);
     }
+
+    public function revisionAdd(Request $request, $branchId)
+    {
+        $branch = \App\Models\Branch::where('user_id', auth()->id())->findOrFail($branchId);
+
+        $validated = $request->validate([
+            'code' => 'required|string',
+            'title' => 'nullable|string',
+        ]);
+
+        $revision = \App\Models\Revision::create([
+            'branch_id' => $branch->id,
+            'code' => $validated['code'],
+            'title' => $validated['title'] ?? '',
+        ]);
+
+        // Optionally, you might want to update the branch's code to the latest revision
+
+        $branch->code = $validated['code'];
+        $branch->save();
+
+
+        return response()->json($revision, 201);
+    }
+
+    public function getRevision($branchId)
+    {
+        // Get the specific revision by the id
+
+        $revision = \App\Models\Revision::whereHas('branch', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->findOrFail($branchId);
+
+        return response()->json($revision);
+    }
 }

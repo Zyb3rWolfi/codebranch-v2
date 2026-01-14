@@ -73,6 +73,7 @@
           <h2 class="text-2xl text-white font-mono">Revisions</h2>
           
           <button 
+            v-if="!isIterating"
             @click="startNewIteration"
             class="flex items-center gap-2 px-3 py-1 text-xs font-mono text-gray-400 border border-[#3C3C3C] rounded hover:border-white hover:text-white transition-all group"
           >
@@ -83,12 +84,34 @@
           </button>
         </div>
 
+        <div v-if="isIterating" class="mb-6 p-6 bg-black/60 border-2 border-white/20 rounded-md animate-in slide-in-from-top-4 duration-300">
+          <h3 class="text-white font-mono text-sm mb-4 uppercase tracking-widest">New Iteration</h3>
+          <input 
+            v-model="iterationData.title" 
+            placeholder="Iteration Title (e.g. Optimized loop logic)" 
+            class="w-full bg-transparent border-b border-[#3C3C3C] pb-2 mb-4 text-white font-mono outline-none focus:border-white"
+          />
+          <textarea 
+            v-model="iterationData.code" 
+            rows="8" 
+            placeholder="New version of the code..." 
+            class="w-full bg-black border border-[#3C3C3C] p-4 rounded-md font-mono text-green-400 outline-none focus:border-white mb-4"
+          ></textarea>
+          
+          <div class="flex justify-end gap-3">
+            <button @click="isIterating = false" class="px-4 py-1 text-xs font-mono text-gray-500 hover:text-white">CANCEL</button>
+            <button @click="saveIteration" class="px-4 py-1 text-xs font-mono bg-white text-black rounded hover:bg-gray-200">SAVE_ITERATION</button>
+          </div>
+        </div>
+
         <div class="border border-[#3C3C3C] rounded-md overflow-hidden bg-[#1E1E1E]">
           <div class="p-4 text-gray-500 border-b border-[#3C3C3C] text-sm font-mono">
             v1 Initial Version
           </div>
-          <div v-for="(revision, index) in codeblockData.revisions" :key="revision.id" class="p-4 bg-[#2D2D30] border-b border-[#3C3C3C] last:border-0">
+          <div v-for="(revision, index) in codeblockData.revisions" :key="revision.id" class="p-4 bg-[#2D2D30] border-b border-[#3C3C3C] last:border-0 hover:bg-[#353538] transition-colors cursor-pointer">
+            <router-link :to="{ name: 'viewRevision', params: { id: route.params.id, revisionId: revision.id } }" class="no-underline">
             <div class="text-white text-sm font-mono">v{{ index + 2 }} {{ revision.title }}</div>
+            </router-link>
           </div>
         </div>
       </section>
@@ -175,6 +198,41 @@ const saveBlock = async () => {
   } catch (error) {
     console.error('Error saving block:', error);
   } finally {
+    isSaving.value = false;
+  }
+};
+
+// Add these to your <script setup>
+const isIterating = ref(false);
+const iterationData = ref({
+  title: '',
+  code: ''
+});
+
+const startNewIteration = () => {
+  // Pre-fill the new iteration with the current code to make editing easier
+  iterationData.value.code = codeblockData.value.code;
+  iterationData.value.title = '';
+  isIterating.value = true;
+};
+
+const saveIteration = async () => {
+  if (!iterationData.value.title || !iterationData.value.code) return;
+  
+  isSaving.value = true;
+  try {
+    // This endpoint should create a record in your 'revisions' table linked to this branch_id
+    await axios.post(`/api/codeblock/${route.params.id}/revision/add`, iterationData.value);
+    isIterating.value = false;
+    codeblockData.value.revisions.push({
+      title: iterationData.value.title,
+      code: iterationData.value.code
+    });
+    await fetchCodeblockData(); // Refresh to see the new version in the list
+  } catch (error) {
+    console.error('Error saving iteration:', error);
+  } finally {
+  
     isSaving.value = false;
   }
 };

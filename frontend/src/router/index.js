@@ -4,9 +4,18 @@ import LoginView from '../views/loginView.vue'
 import AppLayout from '../views/AppLayout.vue'
 import CodeBlocksView from '../components/codeblockView.vue'
 import axios from 'axios'
+import AddRevisionView from '../views/RevisionView.vue'
+import RevisionView from '../views/RevisionView.vue'
+import HomeView from '../views/homeView.vue'
 
 
 const routes = [
+  {
+    path : '/',
+    name : 'home',
+    component : HomeView,
+
+  },
   {
     path: '/login',
     name: 'login',
@@ -22,7 +31,15 @@ const routes = [
         path: 'codeblocks/:id?',
         name: 'codeblocks',
         component: CodeBlocksView,
+        
       },
+      
+      {
+            path: 'codeblocks/:id?/revision/:revisionId?',
+            name: 'viewRevision',
+            component: RevisionView,
+      },
+
       {
         path: 'codeblocks/new?',
         name: 'newCodeblock',

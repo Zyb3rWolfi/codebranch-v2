@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # PHP-FPM
+  app:
+    build: ./backend
+    container_name: codebranch-backend
+    restart: always
+    env_file: .env.production
+    volumes:
+      - ./backend:/var/www
+    networks:
+      - backend-network
+
+  # Nginx for API
+  nginx:
+    image: nginx:alpine
+    container_name: codebranch-api
+    volumes:
+      - ./backend:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - traefik-public
+      - backend-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.codebranch.me`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+
+  # Vue UI
+  frontend:
+    build: ./frontend
+    container_name: codebranch-ui
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`codebranch.me`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+
+  # Database
+  db:
+    image: mysql:8.0
+    container_name: codebranch-db
+    env_file: .env.production
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - backend-network
+
+networks:
+  traefik-public:
+    external: true
+  backend-network:
+
+volumes:
+  dbdata:
