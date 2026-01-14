@@ -31,7 +31,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.codebranch.rule=Host(`codebranch.me`)"
       - "traefik.http.routers.codebranch.entrypoints=websecure"
+      - "--entrypoints.websecure.transport.respondingtimeouts.idletimeout=300s"
       - "traefik.http.routers.codebranch.tls=true" # Add this based on your Homer config
+      - "traefik.docker.network=web"
       - "traefik.http.routers.codebranch.tls.certresolver=myresolver"
       - "traefik.http.services.codebranch.loadbalancer.server.port=80"
 
