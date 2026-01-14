@@ -14,7 +14,7 @@
               </div>
               <ul class="p-2 text-sm text-gray-400 font-mono">
                 <li><a href="#" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">DASHBOARD</a></li>
-                <li><a href="#" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">SIGN_OUT</a></li>
+                <li><a @click.prevent="logout" href="#" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">SIGN_OUT</a></li>
               </ul>
             </div>
           </div>
@@ -89,22 +89,25 @@ import { initFlowbite } from 'flowbite';
 import 'flowbite/dist/flowbite.css';
 import BranchComponent from './branchComponent.vue';
 import axios from 'axios';
+import { useCodeblockStore } from '../stores/codeblockStore';
+
+const store = useCodeblockStore();
 
 const user = ref({})
 const codeblocks = ref([]);
 const searchQuery = ref('');
 
 const filteredBlocks = computed(() => {
-  return codeblocks.value.filter(block => 
+  return store.codeblocks.filter(block => 
     block.title.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
-
 onMounted(async() => {
   initFlowbite();
   try {
     const response = await axios.get('/api/codeblocks');
     codeblocks.value = response.data.data || response.data;
+    store.setCodeblocks(codeblocks.value);
   } catch (error) {
     console.error("Failed to fetch codeblocks:", error);
   }
@@ -117,6 +120,17 @@ onMounted(async() => {
   }
 
 });
+
+async function logout() {
+  try {
+    await axios.post('/api/logout');
+    localStorage.clear();
+
+    window.location.href = '/';
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+}
 </script>
 
 <style scoped>

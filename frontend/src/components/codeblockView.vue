@@ -152,6 +152,9 @@ const isCreating = ref(false);
 const isLoading = ref(false);
 const isSaving = ref(false);
 
+import { useCodeblockStore } from '../stores/codeblockStore';
+const store = useCodeblockStore();
+
 const newBlock = ref({
   title: '',
   description: '',
@@ -195,6 +198,7 @@ const saveBlock = async () => {
     const response = await axios.post('/api/codeblock/add', newBlock.value);
     // Reset form and redirect to the new item
     router.push({ name: 'codeblocks', params: { id: response.data.id } });
+    store.addBlock(response.data);
   } catch (error) {
     console.error('Error saving block:', error);
   } finally {
