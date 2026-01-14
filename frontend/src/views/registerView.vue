@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 // Define reactive references for your form inputs
+const name = ref('');
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
@@ -20,9 +21,6 @@ const handleLogin = async () => {
     });
 
     // 2. Send login request
-    // Because axios.defaults.withCredentials = true is set in main.js,
-    // the browser will automatically include the CSRF token and 
-    // save the session cookie Laravel sends back.
     await axios.post('/api/login', {
       email: email.value,
       password: password.value
@@ -42,17 +40,48 @@ const handleLogin = async () => {
     errorMessage.value = error.response?.data?.message || 'Login failed. Please check your credentials.';
   }
 };
+
+const handleRegister = async () => {
+  // Registration logic here
+    try {
+        await axios.post('/api/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value
+    }, {
+    });
+    } catch (error: any) {
+        console.error('Registration failed', error);
+        errorMessage.value = error.response?.data?.message || 'Registration failed. Please try again.';
+    } finally {
+        // After successful registration, redirect to login
+        const response = await axios.get('/api/user');
+        console.log('User data:', response.data);
+
+        router.push('/app');
+    }
+};
 </script>
 
 <template>
   <div class="login-view flex flex-col items-center justify-center min-h-screen bg-[#1E1E1E] text-white font-mono">
-    <h1 class="text-3xl mb-8">Login</h1>
+    <h1 class="text-3xl mb-8">Register</h1>
     
-    <form @submit.prevent="handleLogin" class="w-full max-w-sm space-y-4">
+    <form @submit.prevent="handleRegister" class="w-full max-w-sm space-y-4">
       <div v-if="errorMessage" class="p-3 bg-red-900/50 border border-red-500 text-red-200 text-sm rounded">
         {{ errorMessage }}
       </div>
 
+      <div class="flex flex-col gap-2">
+        <label for="username" class="text-gray-400">Your Name:</label>
+        <input 
+          type="text" 
+          id="username" 
+          v-model="name" 
+          class="bg-[#121212] border border-[#3C3C3C] p-2 rounded focus:outline-none focus:border-blue-500"
+          required 
+        />
+      </div>
       <div class="flex flex-col gap-2">
         <label for="username" class="text-gray-400">Email:</label>
         <input 

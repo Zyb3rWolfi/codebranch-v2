@@ -7,6 +7,7 @@ import axios from 'axios'
 import AddRevisionView from '../views/RevisionView.vue'
 import RevisionView from '../views/RevisionView.vue'
 import HomeView from '../views/homeView.vue'
+import RegisterView from '../views/registerView.vue'
 
 
 const routes = [
@@ -15,6 +16,12 @@ const routes = [
     name : 'home',
     component : HomeView,
 
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterView,
+    meta: { guestOnly: true },
   },
   {
     path: '/login',

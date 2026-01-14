@@ -23,4 +23,22 @@ class AuthController extends Controller
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
+
+    public function register(Request $request) {
+        
+        if (\App\Models\User::where('email', $request['email'])->exists()) {
+            return response()->json(['message' => 'Email already in use'], 409);
+        }
+
+        $user = \App\Models\User::create([
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => bcrypt($request['password']),
+        ]);
+
+
+        Auth::login($user);
+
+        return response()->json(['message' => 'Registration successful'], 201);
+    }
 }
