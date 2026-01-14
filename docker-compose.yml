@@ -3,10 +3,10 @@ version: '3.8'
 services:
   # Laravel App (PHP-FPM)
   app:
-    build: ./backend
+    build: ./backend/codebranch-api
     container_name: codebranch-backend
     restart: always
-    env_file: .env.production
+    env_file: ./backend/codebranch-api/.env
     networks:
       - backend-network
 
@@ -36,7 +36,7 @@ services:
   db:
     image: mysql:8.0
     container_name: codebranch-db
-    env_file: .env.production
+    env_file: ./backend/codebranch-api/.env
     networks:
       - backend-network
 
