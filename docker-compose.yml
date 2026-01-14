@@ -25,13 +25,15 @@ services:
     build: ./frontend
     container_name: codebranch-ui
     networks:
-      - traefik-public
-      - backend-network
+      - web             # Connect to the shared Traefik network
+      - backend-network # Connect to the internal Laravel network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.codebranch.rule=Host(`codebranch.me`)"
       - "traefik.http.routers.codebranch.entrypoints=websecure"
+      - "traefik.http.routers.codebranch.tls=true" # Add this based on your Homer config
       - "traefik.http.routers.codebranch.tls.certresolver=myresolver"
+      - "traefik.http.services.codebranch.loadbalancer.server.port=80"
 
   db:
     image: mysql:8.0
@@ -41,6 +43,8 @@ services:
       - backend-network
 
 networks:
-  traefik-public:
+  # Change this from traefik-public to web to match Homer
+  web:
     external: true
   backend-network:
+    driver: bridge
