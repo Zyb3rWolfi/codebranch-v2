@@ -60,7 +60,7 @@
         <div class="h-px w-full bg-[#3C3C3C] mb-8"></div>
         
         <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-          {{ codeblockData.description }}
+          Intent: {{ codeblockData.intent }}
         </p>
 
         <div class="flex gap-2">
@@ -116,12 +116,6 @@
         </div>
       </section>
 
-      <section class="mb-12 border p-5 rounded-md bg-[#2D2D30] border-[#3C3C3C]">
-        <h2 class="text-2xl text-white mb-6 font-mono">Intent</h2>
-        <p class="text-gray-300 text-sm leading-relaxed font-mono bg-black/20 p-4 rounded border border-[#3C3C3C]">
-          {{ codeblockData.intent }} 
-        </p>
-      </section>
       
       <section class="mb-12 border p-5 rounded-md bg-[#2D2D30] border-[#3C3C3C]">
         <h2 class="text-2xl text-white mb-6 font-mono">Code</h2>
