@@ -31,6 +31,7 @@ const routes = [
   },
   {
     path: '/app',
+    name: 'app',
     component: AppLayout,
     meta: { requiresAuth: true },
     children: [

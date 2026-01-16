@@ -15,6 +15,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('codeblock/add', [\App\Http\Controllers\BranchController::class, 'add']);
     Route::post('codeblock/{id}/revision/add', [\App\Http\Controllers\BranchController::class, 'revisionAdd']);
     Route::get('/codeblocks/revision/{id}', [\App\Http\Controllers\BranchController::class, 'getRevision']);
+    Route::post('codeblock/{id}/delete', [\App\Http\Controllers\BranchController::class, 'delete']);
     
     // Add other protected routes here
     Route::post('/logout', [function (Request $request) {

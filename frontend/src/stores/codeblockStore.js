@@ -11,6 +11,11 @@ export const useCodeblockStore = defineStore('codeBlockStore', {
     },
     setCodeblocks(blocks) {
       this.codeblocks = blocks; // Initial load from API
+    },
+    removeBranch(branchId) {
+      this.codeblocks = this.codeblocks.filter(block => block.id !== branchId);
     }
+
+    
   }
 });

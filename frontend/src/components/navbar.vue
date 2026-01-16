@@ -4,8 +4,8 @@
       <div class="flex items-center justify-end">
         <div class="flex items-center">
           <div class="flex items-center ms-3">
-            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-[#3C3C3C]" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-              <img class="w-8 h-8 rounded-full border border-[#3C3C3C]" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+            <button type="button" class="flex text-sm rounded-full focus:ring-4 focus:ring-[#3C3C3C]" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+              <img class="w-8 h-8 rounded-md border border-[#3C3C3C]" src="../assets/pfp.png" alt="user photo">
             </button>
             <div class="z-50 hidden bg-[#1E1E1E] border border-[#3C3C3C] rounded-md shadow-lg w-44" id="dropdown-user">
               <div class="px-4 py-3 border-b border-[#3C3C3C]">
@@ -13,7 +13,7 @@
                 <p class="text-xs text-gray-500 truncate">user.email</p>
               </div>
               <ul class="p-2 text-sm text-gray-400 font-mono">
-                <li><a href="#" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">DASHBOARD</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdPTXVlLUpUsziCQ06UQDZdO2B_DkXT7zXP37TfIVmRPZwHpw/viewform?usp=publish-editor" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">REPORT_BUG</a></li>
                 <li><a @click.prevent="logout" href="#" class="block p-2 hover:bg-[#2D2D30] hover:text-white rounded">SIGN_OUT</a></li>
               </ul>
             </div>

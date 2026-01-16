@@ -79,4 +79,12 @@ class BranchController
 
         return response()->json($revision);
     }
+
+    public function delete($id)
+    {
+        $branch = \App\Models\Branch::where('user_id', auth()->id())->findOrFail($id);
+        $branch->delete();
+
+        return response()->json(['message' => 'Codeblock deleted successfully']);
+    }
 }

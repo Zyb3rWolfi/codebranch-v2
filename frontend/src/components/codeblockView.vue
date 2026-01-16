@@ -28,7 +28,7 @@
         </div>
         
         <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-          <input v-model="newBlock.description" placeholder="Description of this block..." class="w-full bg-transparent border border-[#3C3C3C] p-2 rounded-md focus:border-white outline-none font-mono text-sm" />
+          <input v-model="newBlock.intent" placeholder="What does this block solve?" class="w-full bg-transparent border border-[#3C3C3C] p-2 rounded-md focus:border-white outline-none font-mono text-sm" />
         </p>
 
         <div class="flex gap-2">
@@ -40,11 +40,6 @@
           </select>
         </div>
       </header>
-
-      <section class="mb-12 border p-5 rounded-md bg-[#2D2D30] border-[#3C3C3C]">
-        <h2 class="text-2xl text-white mb-6 font-mono">Intent</h2>
-        <input v-model="newBlock.intent" placeholder="What problem does this solve?" class="w-full bg-transparent border border-[#3C3C3C] p-3 rounded-md focus:border-white outline-none font-mono text-sm text-gray-300" />
-      </section>
       
       <section class="mb-12 border p-5 rounded-md bg-[#2D2D30] border-[#3C3C3C]">
         <h2 class="text-2xl text-white mb-6 font-mono">Code</h2>
@@ -109,7 +104,7 @@
             v1 Initial Version
           </div>
           <div v-for="(revision, index) in codeblockData.revisions" :key="revision.id" class="p-4 bg-[#2D2D30] border-b border-[#3C3C3C] last:border-0 hover:bg-[#353538] transition-colors cursor-pointer">
-            <router-link :to="{ name: 'viewRevision', params: { id: route.params.id, revisionId: revision.id } }" class="no-underline">
+              <router-link :to="{ name: 'viewRevision', params: { id: route.params.id, revisionId: revision.id } }" class="no-underline">
             <div class="text-white text-sm font-mono">v{{ index + 2 }} {{ revision.title }}</div>
             </router-link>
           </div>
@@ -197,6 +192,15 @@ const saveBlock = async () => {
     console.error('Error saving block:', error);
   } finally {
     isSaving.value = false;
+    // Clear the form data after saving
+    codeblockData.value = null;
+    newBlock.value = {
+      title: '',
+      description: '',
+      intent: '',
+      language: 'javascript',
+      code: ''
+  };  
   }
 };
 
